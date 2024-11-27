@@ -1,6 +1,6 @@
 package com.bubber.aoc
 
-class Day1(input: String) : Puzzle(input), Solvable {
+class Day1(input: String) : Puzzle(input) {
     override fun solvePartOne(): Int {
         var sum = 0
         for (line in inputLines) {
@@ -36,29 +36,8 @@ class Day1(input: String) : Puzzle(input), Solvable {
             "eight" to "8",
             "nine" to "9",
         )
-        val digitList = listOf(
-            "one",
-            "1",
-            "two",
-            "2",
-            "three",
-            "3",
-            "four",
-            "4",
-            "five",
-            "5",
-            "six",
-            "6",
-            "seven",
-            "7",
-            "eight",
-            "8",
-            "nine",
-            "9",
-        )
-        val wordList = listOf(
-            "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
-        )
+        val digitList = listOf("one", "1", "two", "2", "three", "3", "four", "4", "five", "5", "six", "6", "seven", "7", "eight", "8", "nine", "9",)
+        val wordList = listOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
         var sum = 0
         for (line in inputLines) {
             var numberString: String

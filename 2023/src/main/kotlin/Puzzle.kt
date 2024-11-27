@@ -2,6 +2,8 @@ package com.bubber.aoc
 
 import java.io.File
 
-open class Puzzle(filepath: String) {
+abstract class Puzzle(filepath: String) {
     val inputLines = File(filepath).readLines()
+    abstract fun solvePartOne(): Int
+    abstract fun solvePartTwo(): Int
 }

@@ -1,6 +1,6 @@
 package com.bubber.aoc
 
-class Day2(input: String) : Puzzle(input), Solvable {
+class Day2(input: String) : Puzzle(input) {
     override fun solvePartOne(): Int {
         val colorMaxMap = mapOf(
             "green" to 13,
