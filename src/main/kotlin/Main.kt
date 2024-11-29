@@ -1,5 +1,9 @@
 package com.bubber.aoc
 
+import com.bubber.aoc._2023.Day1
+import com.bubber.aoc._2023.Day2
+import com.bubber.aoc._2023.Day3
+
 fun main() {
     runAll()
 }
@@ -12,9 +16,9 @@ fun run(puzzle: Puzzle) {
 
 fun runAll(){
     arrayOf(
-        Day1("2023/src/main/resources/2023/01/input.txt"),
-        Day2("2023/src/main/resources/2023/02/input.txt"),
-        Day3("2023/src/main/resources/2023/03/input.txt")
+        Day1("src/main/resources/2023/01/input.txt"),
+        Day2("src/main/resources/2023/02/input.txt"),
+        Day3("src/main/resources/2023/03/input.txt")
     ).forEach {
         run(it)
     }

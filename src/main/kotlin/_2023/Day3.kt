@@ -1,10 +1,11 @@
-package com.bubber.aoc
+package com.bubber.aoc._2023
 
+import com.bubber.aoc.Puzzle
 import java.util.logging.Logger
 
 
 class Day3(input: String) : Puzzle(input) {
-    val log = Logger.getLogger(this.javaClass.name)
+    private val log = Logger.getLogger(this.javaClass.name)
 
     data class PartNumber(val number: String, val start: Pair<Int, Int>) {
         fun getPoints(): List<Pair<Int, Int>> {

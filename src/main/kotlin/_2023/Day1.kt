@@ -1,4 +1,6 @@
-package com.bubber.aoc
+package com.bubber.aoc._2023
+
+import com.bubber.aoc.Puzzle
 
 class Day1(input: String) : Puzzle(input) {
     override fun solvePartOne(): Int {
