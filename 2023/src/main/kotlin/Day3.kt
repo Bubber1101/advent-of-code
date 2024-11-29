@@ -1,51 +1,87 @@
 package com.bubber.aoc
 
+import java.util.logging.Logger
+
+
 class Day3(input: String) : Puzzle(input) {
+    val log = Logger.getLogger(this.javaClass.name)
 
-    data class PartNumber(val number: String, val start: Pair<Int, Int>, val end: Pair<Int, Int>)
+    data class PartNumber(val number: String, val start: Pair<Int, Int>) {
+        fun getPoints(): List<Pair<Int, Int>> {
+            return number.indices.map { Pair(start.first, start.second + it) }
+        }
+    }
 
+    private val maxRowIndex = inputLines.size
+    private val maxColumnIndex = inputLines[0].length
 
-    val maxRowIndex = inputLines.size
-    val maxColumnIndex = inputLines[0].length
     //relative indexes
-    val before = arrayOf(Pair(0, -1), Pair(-1, -1), Pair(1, -1))
-    val after = arrayOf(Pair(0, 1), Pair(-1, 1), Pair(1, 1))
-    val aboveAndBelow = arrayOf(Pair(1, 0), Pair(-1, 0))
+    private val before = arrayOf(Pair(0, -1), Pair(-1, -1), Pair(1, -1))
+    private val after = arrayOf(Pair(0, 1), Pair(-1, 1), Pair(1, 1))
+    private val aboveAndBelow = arrayOf(Pair(1, 0), Pair(-1, 0))
+    private var numbers: Array<PartNumber> = arrayOf()
 
-    //Too low: 526341
-    //Too high: 529964
-    //wrong: 527322
-    //good: 528819
-    override fun solvePartOne(): Int {
-        var sum = 0
-        var numbers : Array<PartNumber> = arrayOf()
+    init {
+        numbers = findNumbers()
+    }
+
+    private fun findNumbers(): Array<PartNumber> {
         var tempNumber = ""
-
+        var numbers: Array<PartNumber> = arrayOf()
         inputLines.forEachIndexed { i, row ->
             row.forEachIndexed { j, element ->
                 if (element.isDigit()) {
                     tempNumber += element
                 } else {
                     if (tempNumber != "") {
-                        numbers = numbers.plus(PartNumber(tempNumber, Pair(i, j-tempNumber.length), Pair(i,j-1)))
+                        numbers = numbers.plus(PartNumber(tempNumber, Pair(i, j - tempNumber.length)))
                     }
                     tempNumber = ""
                 }
 
-                if (j == maxColumnIndex-1){
+                if (j == maxColumnIndex - 1) {
                     if (tempNumber != "") {
-                        numbers = numbers.plus(PartNumber(tempNumber, Pair(i, j-tempNumber.length+1), Pair(i,j)))
+                        numbers = numbers.plus(PartNumber(tempNumber, Pair(i, j - tempNumber.length + 1)))
                     }
                     tempNumber = ""
                 }
             }
         }
-        return numbers.filter { verifyNumber(it.number, it.start.first, it.start.second) }.map { it.number.toInt() }.sum()
-
-//        return sum
+        return numbers
     }
 
-    fun verifyNumber(num: String, i: Int, j: Int) : Boolean {
+    override fun solvePartOne(): Int {
+        return numbers.filter { verifyNumber(it.number, it.start.first, it.start.second) }.map { it.number.toInt() }
+            .sum()
+    }
+
+    override fun solvePartTwo(): Int {
+        var sum = 0
+
+        inputLines.forEachIndexed { i, row ->
+            row.forEachIndexed { j, element ->
+                if (element == '*') {
+                    log.fine("i= $i, j= $j, -> ${getNumbersAround(i, j)}")
+                    sum += getNumbersAround(i, j).takeIf { it.size == 2 }?.map { it.number.toInt() }
+                        ?.reduce { a, b -> a * b }
+                        ?: 0
+                }
+            }
+        }
+
+        return sum
+    }
+
+    private fun getNumbersAround(i: Int, j: Int): List<PartNumber> {
+        var indexes: Set<Pair<Int, Int>> = setOf()
+        before.plus(after).plus(aboveAndBelow).forEach { indexes = indexes.plus(Pair(it.first + i, it.second + j)) }
+        indexes =
+            indexes.filter { pair -> pair.first > -1 && pair.second > -1 && pair.first < maxRowIndex && pair.second < maxColumnIndex }
+                .toSet()
+        return numbers.filter { it.getPoints().any { point -> indexes.contains(point) } }
+    }
+
+    private fun verifyNumber(num: String, i: Int, j: Int): Boolean {
         var indexes: Array<Pair<Int, Int>> = arrayOf()
 
 
@@ -56,20 +92,16 @@ class Day3(input: String) : Puzzle(input) {
                 indexes = indexes.plus(Pair(it.first + i, it.second + j + x))
             }
         }
-        var distinct = indexes.distinct()
+        val distinct = indexes.distinct()
             .filter { pair -> pair.first > -1 && pair.second > -1 && pair.first < maxRowIndex && pair.second < maxColumnIndex }
 
-        print("Element at [$i][$j] is $num [")
-//        distinct.forEach {
-//            print("[${it.first},${it.second} = ${inputLines[it.first][it.second]} ]")
-//        }
-//        println("]")
-        println(distinct.map { inputLines[it.first][it.second] }.filter { it != '.' }.filter{ !it.isDigit() })
-        return distinct.map { inputLines[it.first][it.second] }.filter { it != '.' }.filter{ !it.isDigit() }.isNotEmpty()
-    }
+        log.fine(
+            "Element at [$i][$j] is $num [${
+                distinct.map { inputLines[it.first][it.second] }.filter { it != '.' }.filter { !it.isDigit() }
+            }]"
+        )
 
-    override fun solvePartTwo(): Int {
-        var sum = 0
-        return sum
+        return distinct.map { inputLines[it.first][it.second] }.filter { it != '.' }.filter { !it.isDigit() }
+            .isNotEmpty()
     }
 }

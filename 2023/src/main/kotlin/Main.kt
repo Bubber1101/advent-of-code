@@ -1,9 +1,7 @@
 package com.bubber.aoc
 
 fun main() {
-//    runAll()
-//    run(Day3("2023/src/main/resources/2023/03/example_1.txt"))
-    run(Day3("2023/src/main/resources/2023/03/input.txt"))
+    runAll()
 }
 
 fun run(puzzle: Puzzle) {
