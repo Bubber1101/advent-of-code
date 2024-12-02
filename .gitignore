@@ -28,3 +28,4 @@ replay_pid*
 /build/
 /.gradle/
 /src/main/resources/2023/*/input.txt
+/src/main/resources/2024/*
