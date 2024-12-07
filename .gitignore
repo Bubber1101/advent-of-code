@@ -27,5 +27,5 @@ replay_pid*
 /.idea/
 /build/
 /.gradle/
-/src/main/resources/2023/*/input.txt
-/src/main/resources/2024/*
+/src/main/resources/*/*/*.txt
+/src/main/resources/*/*.txt
