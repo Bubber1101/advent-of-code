@@ -5,7 +5,7 @@ import com.bubber.aoc._2023.Day2
 import com.bubber.aoc._2023.Day3
 
 fun main() {
-    run(com.bubber.aoc._2015.Day1("src/main/resources/2015/01.txt"))
+    run(com.bubber.aoc._2024.Day8("src/main/resources/2024/08.txt"))
 }
 
 fun run(puzzle: Puzzle) {
