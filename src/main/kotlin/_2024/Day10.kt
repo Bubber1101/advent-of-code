@@ -6,23 +6,10 @@ class Day10(input: String) : Puzzle(input) {
     private val maxRowIndex = inputLines.size
     private val maxColumnIndex = inputLines[0].length
     private val around = arrayOf(1 to 0, 0 to 1, 0 to -1, -1 to 0)
-    override fun solvePartOne(): Int {
-        var sum = 0
-        inputLines.forEachIndexed { j, line ->
-            line.forEachIndexed { i, it ->
-                if (it == '0') {
-                    sum += trail(j to i, 0).distinct().count()
-                }
-            }
-        }
-
-
-        return sum
-    }
 
     fun trail(start: Pair<Int, Int>, level: Int): List<Pair<Int, Int>> {
-        var list : List<Pair<Int, Int>> = mutableListOf()
-        if (level == 9){
+        var list: List<Pair<Int, Int>> = mutableListOf()
+        if (level == 9) {
             return mutableListOf(start)
         }
         getPointsAround(start).filter(::isLegal).filter {
@@ -43,8 +30,28 @@ class Day10(input: String) : Puzzle(input) {
         return around.toMutableList().map { it.first + point.first to it.second + point.second }
     }
 
+    override fun solvePartOne(): Int {
+        var sum = 0
+        inputLines.forEachIndexed { j, line ->
+            line.forEachIndexed { i, it ->
+                if (it == '0') {
+                    sum += trail(j to i, 0).distinct().count()
+                }
+            }
+        }
+        return sum
+    }
+
     override fun solvePartTwo(): Int {
-        return 0
+        var sum = 0
+        inputLines.forEachIndexed { j, line ->
+            line.forEachIndexed { i, it ->
+                if (it == '0') {
+                    sum += trail(j to i, 0).count()
+                }
+            }
+        }
+        return sum
     }
 
 }
