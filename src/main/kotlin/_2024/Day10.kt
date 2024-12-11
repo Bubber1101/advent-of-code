@@ -7,8 +7,8 @@ class Day10(input: String) : Puzzle(input) {
     private val maxColumnIndex = inputLines[0].length
     private val around = arrayOf(1 to 0, 0 to 1, 0 to -1, -1 to 0)
 
-    fun trail(start: Pair<Int, Int>, level: Int): List<Pair<Int, Int>> {
-        var list: List<Pair<Int, Int>> = mutableListOf()
+    private fun trail(start: Pair<Int, Int>, level: Int): List<Pair<Int, Int>> {
+        val list: MutableList<Pair<Int, Int>> = mutableListOf()
         if (level == 9) {
             return mutableListOf(start)
         }
@@ -22,11 +22,11 @@ class Day10(input: String) : Puzzle(input) {
         return list
     }
 
-    fun isLegal(point: Pair<Int, Int>): Boolean {
+    private fun isLegal(point: Pair<Int, Int>): Boolean {
         return point.first > -1 && point.second > -1 && point.first < maxRowIndex && point.second < maxColumnIndex
     }
 
-    fun getPointsAround(point: Pair<Int, Int>): List<Pair<Int, Int>> {
+    private fun getPointsAround(point: Pair<Int, Int>): List<Pair<Int, Int>> {
         return around.toMutableList().map { it.first + point.first to it.second + point.second }
     }
 
