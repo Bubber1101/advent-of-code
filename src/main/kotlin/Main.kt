@@ -7,7 +7,7 @@ import kotlin.time.measureTime
 
 fun main() {
     measureTime {
-        run(com.bubber.aoc._2024.Day9("src/main/resources/2024/09.txt"))
+        run(com.bubber.aoc._2024.Day12("src/main/resources/2024/12.txt"))
     }.let { println("Time: $it") }
 }
 
