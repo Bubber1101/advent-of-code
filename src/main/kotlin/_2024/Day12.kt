@@ -33,11 +33,11 @@ class Day12(input: String) : Puzzle(input) {
     )
 
     var plotMap = mutableMapOf<Int, List<Plot>>()
+    var plots = mutableListOf<MutableList<Plot>>()
 
     override fun solvePartOne(): Int {
         var areaIdCount = 0
         var sum = 0
-        var plots = mutableListOf<MutableList<Plot>>()
         inputLines.forEachIndexed { j, line ->
             plots.add(mutableListOf())
             line.forEachIndexed { i, char ->
@@ -55,34 +55,41 @@ class Day12(input: String) : Puzzle(input) {
                 var neighbors = neighborCoords.filter(::isLegal).map { plots[it.first][it.second] }
 
                 //add areaId
-
-                var sameCropPlotAreaIds =
-                    neighbors
-                        .filter { it.crop == plot.crop && it.areaId != -1 }
-                        .map { it.areaId }
-                if (sameCropPlotAreaIds.isNotEmpty()) {
-                    plot.areaId = sameCropPlotAreaIds.first()
-
-                } else {
-                    plot.areaId = ++areaIdCount
+                if (plot.areaId == -1) {
+                    var sameCropPlotAreaIds =
+                        neighbors
+                            .filter { it.crop == plot.crop && it.areaId != -1 }
+                            .map { it.areaId }
+                    if (sameCropPlotAreaIds.isNotEmpty()) {
+                        plot.areaId = sameCropPlotAreaIds.first()
+                    } else {
+                        plot.areaId = ++areaIdCount
+                    }
                 }
 
                 //add Fence to different crop
 
-                neighbors.filter{ it.crop != plot.crop}
+                neighbors.filter { it.crop != plot.crop }
                     .map { it.coords.first - plot.coords.first to it.coords.second - plot.coords.second }
                     .map { fenceSides.get(it) }.filterNotNull().forEach { plot.fences.add(it) }
 
-                plotMap.merge(plot.areaId, mutableListOf(plot), {a, b -> a + b})
+                plotMap.merge(plot.areaId, mutableListOf(plot), { a, b -> a + b })
+                flood(plot.areaId, plot.coords, plot.crop)
             }
         }
-
-        for ( (_, plotList) in plotMap)
-        {
+        for ((_, plotList) in plotMap) {
             sum += plotList.size * plotList.map { it.fences.count() }.sum()
             println("Crop: ${plotList.first().crop}, ${plotList.size} * ${plotList.map { it.fences.count() }.sum()}")
         }
         return sum
+    }
+
+    fun flood(areaId: Int, coords: Pair<Int, Int>, crop: String) {
+        getPointsAround(coords).filter(::isLegal).map { plots[it.first][it.second] }
+            .filter { it.crop == crop && it.areaId != areaId }.forEach{
+                it.areaId = areaId
+                flood(areaId, it.coords, crop)
+            }
     }
 
     override fun solvePartTwo(): Long {
