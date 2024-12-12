@@ -4,13 +4,6 @@ import com.bubber.aoc.Puzzle
 
 class Day12(input: String) : Puzzle(input) {
 
-    /**   1
-     *    _
-     * 4| A | 2
-     *    _
-     *    3
-     */
-
     data class Plot(
         val crop: String,
         var areaId: Int = -1,
@@ -18,26 +11,26 @@ class Day12(input: String) : Puzzle(input) {
         val coords: Pair<Int, Int>
     )
 
-    var fenceSides = mapOf(
+    /**   1
+     *    _
+     * 4| A | 2
+     *    _
+     *    3
+     */
+    private var fenceSides = mapOf(
         1 to 0 to 3, //down
         0 to 1 to 2, // right
         0 to -1 to 4, // left
         -1 to 0 to 1 // up
     )
 
-    var reverseFence = mapOf(
-        3 to 1,
-        1 to 3,
-        2 to 4,
-        4 to 2
-    )
-
     var plotMap = mutableMapOf<Int, List<Plot>>()
     var plots = mutableListOf<MutableList<Plot>>()
 
-    override fun solvePartOne(): Int {
+    private fun prepare() {
+        plotMap = mutableMapOf()
+        plots = mutableListOf()
         var areaIdCount = 0
-        var sum = 0
         inputLines.forEachIndexed { j, line ->
             plots.add(mutableListOf())
             line.forEachIndexed { i, char ->
@@ -77,24 +70,58 @@ class Day12(input: String) : Puzzle(input) {
                 flood(plot.areaId, plot.coords, plot.crop)
             }
         }
-        for ((_, plotList) in plotMap) {
-            sum += plotList.size * plotList.map { it.fences.count() }.sum()
-            println("Crop: ${plotList.first().crop}, ${plotList.size} * ${plotList.map { it.fences.count() }.sum()}")
-        }
-        return sum
     }
 
-    fun flood(areaId: Int, coords: Pair<Int, Int>, crop: String) {
+    private fun flood(areaId: Int, coords: Pair<Int, Int>, crop: String) {
         getPointsAround(coords).filter(::isLegal).map { plots[it.first][it.second] }
-            .filter { it.crop == crop && it.areaId != areaId }.forEach{
+            .filter { it.crop == crop && it.areaId != areaId }.forEach {
                 it.areaId = areaId
                 flood(areaId, it.coords, crop)
             }
     }
 
-    override fun solvePartTwo(): Long {
-        var sum = 0L
+    override fun solvePartOne(): Int {
+        var sum = 0
+        prepare()
+        for ((_, plotList) in plotMap) {
+            sum += plotList.size * plotList.map { it.fences.count() }.sum()
+//            println("Crop: ${plotList.first().crop}, ${plotList.size} * ${plotList.map { it.fences.count() }.sum()}")
+        }
+        return sum
+    }
 
+    override fun solvePartTwo(): Int {
+        var sum = 0
+        prepare()
+        for ((_, plotList) in plotMap) {
+            var sides = 0
+            val fenceDirectionToCoords =
+                plotList.map { it to it.fences }
+                    .flatMap { (plot, fences) -> fences.map { it to plot.coords } }
+                    .groupBy { it.first }
+            for ((dir, coordList) in fenceDirectionToCoords) {
+                var previous = -1 to -1
+                var cordslist = coordList
+                if (dir and 1 == 0) {
+                    cordslist = coordList.sortedBy { it.second.second }
+                }
+                for (coords in cordslist) {
+                    val curr = coords.second
+                    if (dir and 1 == 1) {
+                        if (previous.first != curr.first || previous.second != curr.second - 1) {
+                            sides++
+                        }
+                    } else {
+                        if (previous.second != curr.second || previous.first != curr.first - 1) {
+                            sides++
+                        }
+                    }
+                    previous = curr
+                }
+            }
+            sum += plotList.size * sides
+//            println("Crop: ${plotList.first().crop}, ${plotList.size} * ${sides}")
+        }
         return sum
     }
 }
