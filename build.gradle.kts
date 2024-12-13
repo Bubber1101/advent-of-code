@@ -16,6 +16,7 @@ application {
 }
 
 dependencies {
+    implementation("com.google.ortools:ortools-java:9.11.4210")
     testImplementation(kotlin("test"))
 }
 
