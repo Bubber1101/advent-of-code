@@ -3,12 +3,12 @@ package com.bubber.aoc
 import com.bubber.aoc._2023.Day1
 import com.bubber.aoc._2023.Day2
 import com.bubber.aoc._2023.Day3
-import com.bubber.aoc._2024.Day14
+import com.bubber.aoc._2024.Day15
 import kotlin.time.measureTime
 
 fun main() {
     measureTime {
-        run(Day14("src/main/resources/2024/14.txt"))
+        run(Day15("src/main/resources/2024/15.txt"))
     }.let { println("Time: $it") }
 }
 
@@ -18,7 +18,7 @@ fun run(puzzle: Puzzle) {
     println(" Part Two: " + puzzle.solvePartTwo())
 }
 
-fun runAll(){
+fun runAll() {
     arrayOf(
         Day1("src/main/resources/2023/01/input.txt"),
         Day2("src/main/resources/2023/02/input.txt"),

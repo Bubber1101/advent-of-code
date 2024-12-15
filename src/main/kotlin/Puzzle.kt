@@ -7,10 +7,19 @@ abstract class Puzzle(filepath: String) {
     private val maxRowIndex = inputLines.size
     private val maxColumnIndex = inputLines[0].length
     private val around = arrayOf(
-        1 to 0, //down
-        0 to 1, // right
-        0 to -1, // left
-        -1 to 0) // up
+        1 to 0,
+        0 to 1,
+        0 to -1,
+        -1 to 0
+    )
+
+    //X TO Y
+    enum class Direction(val coords: Pair<Int, Int>) {
+        UP(0 to -1),
+        RIGHT(1 to 0),
+        DOWN(0 to 1),
+        LEFT(-1 to 0)
+    }
 
     abstract fun solvePartOne(): Number
     abstract fun solvePartTwo(): Number
